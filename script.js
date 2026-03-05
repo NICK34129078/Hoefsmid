@@ -57,9 +57,29 @@ function setCurrentYear() {
   yearEl.textContent = String(now.getFullYear());
 }
 
+// Contact-sectie: animatie van onder naar boven bij in beeld scrollen
+function setupContactScrollAnimation() {
+  const section = document.getElementById("contact");
+  if (!section) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          section.classList.add("is-visible");
+        }
+      });
+    },
+    { rootMargin: "0px 0px -80px 0px", threshold: 0.1 }
+  );
+
+  observer.observe(section);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   setupSmoothScroll();
   setupMobileNav();
   setCurrentYear();
+  setupContactScrollAnimation();
 });
 
