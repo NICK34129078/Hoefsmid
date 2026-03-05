@@ -76,10 +76,51 @@ function setupContactScrollAnimation() {
   observer.observe(section);
 }
 
+// Reviews-carousel: vloeiende continue scroll van links naar rechts, geen pauze bij hover
+function setupReviewsCarousel() {
+  const track = document.querySelector(".carousel-track");
+  if (!track) return;
+
+  const cards = track.querySelectorAll(".review-card");
+  const count = cards.length;
+  if (count === 0) return;
+
+  for (let i = 0; i < count; i++) {
+    track.appendChild(cards[i].cloneNode(true));
+  }
+}
+
+// Algemene scroll-animatie voor kaarten, tekstblokken en foto's
+function setupScrollReveal() {
+  const elements = document.querySelectorAll(
+    ".media-card, .service-card, .why-item, .gallery-item, .section-header, .section-text"
+  );
+
+  if (!elements.length) return;
+
+  elements.forEach((el) => el.classList.add("scroll-reveal"));
+
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          obs.unobserve(entry.target);
+        }
+      });
+    },
+    { rootMargin: "0px 0px -15%", threshold: 0.1 }
+  );
+
+  elements.forEach((el) => observer.observe(el));
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   setupSmoothScroll();
   setupMobileNav();
   setCurrentYear();
   setupContactScrollAnimation();
+  setupReviewsCarousel();
+  setupScrollReveal();
 });
 
